@@ -18,9 +18,9 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-#@st.cache_data
+@st.cache_data
 def get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name):
-    engine = create_engine(f"mysql+pymysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}")
+    engine = create_engine(f"mysql+pymysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}", echo=True)
     df = pd.read_sql_table(table_name, con=engine)
     return df
 
