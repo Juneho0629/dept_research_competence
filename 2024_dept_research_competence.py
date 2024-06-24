@@ -24,11 +24,11 @@ def get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, tab
     df = pd.read_sql_table(table_name, con=engine)
     return df
 
-db_username = st.secrets['conn']['db_username']
-db_password = st.secrets['conn']['db_password']
-db_host = st.secrets['conn']['db_host']
-db_port = st.secrets['conn']['db_port']
-db_name = st.secrets['conn']['db_name']
+db_username = st.secrets['conn']['username']
+db_password = st.secrets['conn']['password']
+db_host = st.secrets['conn']['host']
+db_port = st.secrets['conn']['port']
+db_name = st.secrets['conn']['name']
 
 def main():
     # 페이지 제목
