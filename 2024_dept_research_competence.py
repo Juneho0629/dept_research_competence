@@ -1,4 +1,3 @@
-import json
 import os
 import pandas as pd
 import streamlit as st
@@ -20,9 +19,6 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 """
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
-
-with open('config_dept.json') as f:
-    config = json.load(f)
 
 db_username = os.getenv('DB_USERNAME')
 db_password = os.getenv('DB_PASSWORD')
