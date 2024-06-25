@@ -1,4 +1,5 @@
 import json
+import os
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -23,17 +24,17 @@ st.markdown(streamlit_style, unsafe_allow_html=True)
 with open('config_dept.json') as f:
     config = json.load(f)
 
+db_username = os.getenv('DB_USERNAME')
+db_password = os.getenv('DB_PASSWORD')
+db_host = os.getenv('DB_HOST')
+db_port = os.getenv('DB_PORT')
+db_name = os.getenv('DB_NAME')
+
 @st.cache_data
 def get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name):
     engine = create_engine(f"mysql+pymysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}")
     df = pd.read_sql_table(table_name, con=engine)
     return df
-
-db_username = config['db_username']
-db_password = config['db_password']
-db_host = config['db_host']
-db_port = config['db_port']
-db_name = config['db_name']
 
 def main():
     st.header("학과별 연구역량(논문) 분석보고서")
