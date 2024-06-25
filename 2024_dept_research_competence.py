@@ -4,7 +4,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 import mysql.connector
-from sqlalchemy import create_engine
 
 st.set_page_config(layout="wide")
 
