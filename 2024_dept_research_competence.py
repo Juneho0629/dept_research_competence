@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -20,11 +19,11 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-db_username = os.getenv('DB_USERNAME')
-db_password = os.getenv('DB_PASSWORD')
-db_host = os.getenv('DB_HOST')
-db_port = os.getenv('DB_PORT')
-db_name = os.getenv('DB_NAME')
+db_username = st.secrets['DB_USERNAME']
+db_password = st.secrets['DB_PASSWORD']
+db_host = st.secrets['DB_HOST']
+db_port = st.secrets['DB_PORT']
+db_name = st.secrets['DB_NAME']
 
 @st.cache_data
 def get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name):
