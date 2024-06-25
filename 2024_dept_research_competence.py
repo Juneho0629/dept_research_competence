@@ -17,10 +17,10 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 """
 
 connection = mysql.connector.connect(
-    host = st.secrets['mysql']['host'],
-    user = st.secrets['mysql']['user'],
-    password = st.secrets['mysql']['password'],
-    database = st.secrets['mysql']['database']
+    host = st.secrets['mysql']['db_host'],
+    user = st.secrets['mysql']['db_user'],
+    password = st.secrets['mysql']['db_password'],
+    database = st.secrets['mysql']['db_database']
 )
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
