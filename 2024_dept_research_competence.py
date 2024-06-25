@@ -20,7 +20,8 @@ connection = mysql.connector.connect(
     host = st.secrets['mysql']['db_host'],
     user = st.secrets['mysql']['db_user'],
     password = st.secrets['mysql']['db_password'],
-    database = st.secrets['mysql']['db_database']
+    database = st.secrets['mysql']['db_database'],
+    port = st.secrets['mysql']['db_port']
 )
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
