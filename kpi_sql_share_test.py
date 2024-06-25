@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import plotly.graph_objects as go
 import numpy as np
 import mysql.connector
+import MySQLdb
 from sqlalchemy import create_engine
 
 st.set_page_config(layout="wide")
@@ -20,22 +21,13 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-def init_connection():
-    return mysql.connector.connect(**st.secrets["mysql"])
-
-conn = init_connection()
-
-def run_query(query):
-    with conn.cursor() as cur:
-        cur.execute(query)
-        result = cur.fetchall()
-    return pd.DataFrame(result)
+conn = st.connection('mysql', type='sql')
     
 def main():
     st.header("학과별 연구역량(논문) 분석보고서")
 
     table_name = "department_scival_2019_2023"
-    df = run_query(f"SELECT * from {table_name};")
+    df = conn.query(f'SELECT * from {table_name};', ttl=600)
 
     category = df['계열'].unique()
     selected_category = st.selectbox("계열 선택", category)
