@@ -5,3 +5,4 @@ pandas
 numpy
 pymysql
 mysql-connector-python
+mysqlclient
