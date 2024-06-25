@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.graph_objects as go
 import numpy as np
-from sqlalchemy import create_engine
+import mysql.connector
 
 st.set_page_config(layout="wide")
 
@@ -19,23 +19,27 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-db_username = st.secrets['DB_USERNAME']
-db_password = st.secrets['DB_PASSWORD']
-db_host = st.secrets['DB_HOST']
-db_port = st.secrets['DB_PORT']
-db_name = st.secrets['DB_NAME']
+@st.cache_resource
+def init_connection():
+    return mysql.connector.connect(**st.secrets["mysql"])
 
-@st.cache_data
-def get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name):
-    engine = create_engine(f"mysql+pymysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}")
-    df = pd.read_sql_table(table_name, con=engine)
+conn = init_connection()
+
+@st.cache_data#(ttl=600)
+def run_query(query):
+    df = pd.DataFrame()
+    with conn.cursor() as cur:
+        cur.execute(query)
+        rows = cur.fetchall()
+        if rows:
+            df = pd.DataFrame(rows, columns=[i[0] for i in cur.description])
     return df
 
 def main():
     st.header("학과별 연구역량(논문) 분석보고서")
 
     table_name = "department_scival_2019_2023"
-    df = get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name)
+    df = run_query(f"SELECT * from {table_name};")
 
     category = df['계열'].unique()
     selected_category = st.selectbox("계열 선택", category)
@@ -45,7 +49,7 @@ def main():
     selected_data = df[df['학과분류'] == selected_dept]  
 
     table_name = selected_dept
-    univ_comparison = get_data_from_mysql(db_username, db_password, db_host, db_port, db_name, table_name)  
+    univ_comparison = run_query(f"SELECT * from {table_name};")
 
     # 논문 수, 논문 1편당 피인용수, 평균 FWCI, FWCI 상위10% 논문비율, SNIP기준 상위 10% 저널 게재비율, 국제공동연구 논문 비율을 계산합니다.
     univ_comparison['total_citations'] = univ_comparison[['citation_count_2019', 'citation_count_2020', 'citation_count_2021', 'citation_count_2022', 'citation_count_2023']].sum(axis=1)
