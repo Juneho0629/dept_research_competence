@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -20,20 +19,17 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockqu
 
 st.markdown(streamlit_style, unsafe_allow_html=True)
 
-with open('config_dept.json') as f:
-    config = json.load(f)
-
 @st.cache_data
 def get_data_from_postgresql(db_username, db_password, db_host, db_port, db_name, table_name):
     engine = create_engine(f"postgresql+psycopg2://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}")
     df = pd.read_sql_table(table_name, con=engine)
     return df
 
-db_username = config['db_username']
-db_password = config['db_password']
-db_host = config['db_host']
-db_port = config['db_port']
-db_name = config['db_name']
+db_username = st.secrets['db_username']
+db_password = st.secrets['db_password']
+db_host = st.secrets['db_host']
+db_port = st.secrets['db_port']
+db_name = st.secrets['db_name']
 
 def main():
     
